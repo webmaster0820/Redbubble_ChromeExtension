@@ -140,10 +140,7 @@ $(document).ready(function() {
   });
 
   $(document).on("click", "#media_children", function() {
-    $("li[data-product-type='kids-clothes']")
-      .children("div")
-      .first()
-      .trigger("click");
+    Choose_children($(this).is(":checked"));
   });
 
   $(document).on("click", "#adults_only", function() {
@@ -196,7 +193,7 @@ $(document).ready(function() {
       Change_Product_Custom_point_slide(e.clientX, e.clientY);
     }
   });
-
+  Change_Product_color_white();
   App_logic();
 });
 let flg_open_custom_color = false;
@@ -227,13 +224,39 @@ const Toggle_enable = (val, adults) => {
     }
   });
 };
+const Choose_children = (val) => {
+  if (!val) {
+    $("li[data-product-type='kids-clothes']")
+      .children("div")
+      .first()
+      .trigger("click");
+    return;
+  }
+  $("li[data-product-type]").each(function() {
+    if ($(this).attr("data-product-type") == "kids-clothes") {
+      if ($(this).hasClass("enabled") == false)
+        $(this)
+          .children("div")
+          .first()
+          .trigger("click");
+      return;
+    } else if ($(this).hasClass("enabled"))
+      $(this)
+        .children("div")
+        .first()
+        .trigger("click");
+  });
+};
 const Update_all_products_btn = () => {
   if ($("li[data-product-type]:not(.enabled)").length == 0) {
     $("#all_products").prop("checked", true);
   } else $("#all_products").removeAttr("checked");
 };
 const Update_children_btn = () => {
-  if ($("li[data-product-type='kids-clothes']").hasClass("enabled")) {
+  if (
+    $("li[data-product-type='kids-clothes']").hasClass("enabled") &&
+    $("li[data-product-type].enabled").length == 1
+  ) {
     $("#media_children").prop("checked", true);
   } else $("#media_children").removeAttr("checked");
 };
@@ -272,6 +295,8 @@ const Change_Product_color_black = () => {
   $(".react_color_black").each(function() {
     $(this).trigger("click");
   });
+  $("#work_product_type_options_clock_frame_color").val("black");
+  
 };
 
 const Change_Product_color_white = () => {
@@ -300,6 +325,8 @@ const Change_Product_color_white = () => {
   $(".react_color_white").each(function() {
     $(this).trigger("click");
   });
+  $("#work_product_type_options_clock_frame_color").val("white");
+
 };
 
 const Change_Product_Custom_point = (x, y) => {
