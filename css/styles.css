@@ -1,0 +1,18 @@
+@media only screen and (max-width: 800px) {
+    .floatWrapper {float:none!important;}       
+    .float-panel {position:static!important;}
+    .main-content {padding:20px;margin-right:0px;}
+}
+#vertical-nav a {
+    text-transform:uppercase;
+    display:block;
+    text-align:center;
+    font:bold 20px/50px Arial;
+    text-decoration:none;
+    color:#666;
+    transition:color 0.25s;
+}
+
+#vertical-nav a.active,  #vertical-nav a:hover {
+    color:#b49901;
+}
