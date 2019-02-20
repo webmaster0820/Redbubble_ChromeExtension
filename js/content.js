@@ -28,47 +28,90 @@ $('[for="media_digital"]').ready(function () {
 ')
 
 });
-$(document).ready(function(){
+$(document).ready(function () {
 
-    $( document ).on( "click", "#all_products", function() {
-        Toggle_enable($(this).is(":checked"),false);
+    $(document).on("click", "#all_products", function () {
+        Toggle_enable($(this).is(":checked"), false);
     });
-    $( document ).on( "click", "#media_children", function() {
+
+    $(document).on("click", "#media_children", function () {
         $("li[data-product-type='kids-clothes']").children('div').first().trigger("click");
     });
-    $( document ).on( "click", "#adults_only", function() {
-        Toggle_enable($(this).is(":checked"),true);
+
+    $(document).on("click", "#adults_only", function () {
+        Toggle_enable($(this).is(":checked"), true);
     });
+
+    $(document).on("click", "#media_black_background", function () {
+        Change_Product_color();
+    });
+    $(document).on("click", ".sp-color", function (e) {
+        console.log(e);
+    });
+    
     App_logic();
 });
 
-const App_logic = ()=>{
+const App_logic = () => {
     Update_all_products_btn();
     Update_children_btn();
     Update_adults_only();
-    setTimeout(App_logic,50);
+    setTimeout(App_logic, 50);
 }
 
 
-const Toggle_enable = (val,adults) =>{
-    $("li[data-product-type]").each(function(){
-        if(val != $(this).hasClass("enabled")){
+const Toggle_enable = (val, adults) => {
+    $("li[data-product-type]").each(function () {
+        if (adults) {
+            if ($(this).attr("data-product-type") == "kids-clothes") {
+                if ($(this).hasClass("enabled") == true) $(this).children('div').first().trigger("click");
+                return;
+            } else if (!val) return;
+        }
+        if (val != $(this).hasClass("enabled")) {
             $(this).children('div').first().trigger("click");
         }
     });
 }
-const Update_all_products_btn = ()=> {
-    if($("li[data-product-type]:not(.enabled)").length == 0){
+const Update_all_products_btn = () => {
+    if ($("li[data-product-type]:not(.enabled)").length == 0) {
         $("#all_products").prop('checked', true);
-    }else $("#all_products").removeAttr('checked');
+    } else $("#all_products").removeAttr('checked');
 }
-const Update_children_btn = ()=> {
-    if($("li[data-product-type='kids-clothes']").hasClass("enabled")){
+const Update_children_btn = () => {
+    if ($("li[data-product-type='kids-clothes']").hasClass("enabled")) {
         $("#media_children").prop('checked', true);
-    }else $("#media_children").removeAttr('checked');
+    } else $("#media_children").removeAttr('checked');
 }
-const Update_adults_only = ()=>{
-    if($("li[data-product-type]:not(.enabled)").length == 1 && $("li[data-product-type='kids-clothes']").hasClass("enabled") == false){
+const Update_adults_only = () => {
+    if ($("li[data-product-type]:not(.enabled)").length == 1 && $("li[data-product-type='kids-clothes']").hasClass("enabled") == false) {
         $("#adults_only").prop('checked', true);
-    }else $("#adults_only").removeAttr('checked');
+    } else $("#adults_only").removeAttr('checked');
+}
+
+const Change_Product_color = () => {
+    new Promise(function (resolve, reject) {
+        let cnt = 0;
+        $(".sp-replacer.sp-light").each(function () {
+            $(this).trigger("click"); // (*)
+            cnt++;
+        });
+        resolve(cnt);
+
+    }).then(function (result) { // (**)
+
+        alert(result); // 1
+        return result * 2;
+
+    }).then(function (result) { // (***)
+
+        alert(result); // 2
+        return result * 2;
+
+    }).then(function (result) {
+
+        alert(result); // 4
+        return result * 2;
+
+    });
 }
