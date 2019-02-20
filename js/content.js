@@ -32,5 +32,15 @@ console.log($('#media_wrapper').html());
 });
 
 $(document).ready(function(){
-    
+    $( document ).on( "change", "#all_products", function() {
+        Toggle_enable($(this).is(":checked"));
+    });
 });
+
+const Toggle_enable = (val) =>{
+    let sel = ".rb-button.enable-all";
+    if(!val) sel = ".rb-button.disable-all.green";
+    $(sel).each(function(index){
+        $(this).trigger("click");
+    });
+}
