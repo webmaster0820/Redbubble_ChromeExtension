@@ -18,7 +18,6 @@ $('[for="media_photography"]').ready(function () {
         </label>\
     ');
 
-    console.log($('#media_wrapper').html());
 
 });
 $('[for="media_digital"]').ready(function () {
@@ -27,20 +26,49 @@ $('[for="media_digital"]').ready(function () {
         <input name="work[media_codes][adults_only]" type="hidden" value="0"><input id="adults_only" type="checkbox" value="1" name="work[media_codes][adults_only]"><span>Adults Only</span>\
         </label>\
 ')
-console.log($('#media_wrapper').html());
 
 });
-
 $(document).ready(function(){
-    $( document ).on( "change", "#all_products", function() {
-        Toggle_enable($(this).is(":checked"));
+
+    $( document ).on( "click", "#all_products", function() {
+        Toggle_enable($(this).is(":checked"),false);
     });
+    $( document ).on( "click", "#media_children", function() {
+        $("li[data-product-type='kids-clothes']").children('div').first().trigger("click");
+    });
+    $( document ).on( "click", "#adults_only", function() {
+        Toggle_enable($(this).is(":checked"),true);
+    });
+    App_logic();
 });
 
-const Toggle_enable = (val) =>{
-    let sel = ".rb-button.enable-all";
-    if(!val) sel = ".rb-button.disable-all.green";
-    $(sel).each(function(index){
-        $(this).trigger("click");
+const App_logic = ()=>{
+    Update_all_products_btn();
+    Update_children_btn();
+    Update_adults_only();
+    setTimeout(App_logic,50);
+}
+
+
+const Toggle_enable = (val,adults) =>{
+    $("li[data-product-type]").each(function(){
+        if(val != $(this).hasClass("enabled")){
+            $(this).children('div').first().trigger("click");
+        }
     });
+}
+const Update_all_products_btn = ()=> {
+    if($("li[data-product-type]:not(.enabled)").length == 0){
+        $("#all_products").prop('checked', true);
+    }else $("#all_products").removeAttr('checked');
+}
+const Update_children_btn = ()=> {
+    if($("li[data-product-type='kids-clothes']").hasClass("enabled")){
+        $("#media_children").prop('checked', true);
+    }else $("#media_children").removeAttr('checked');
+}
+const Update_adults_only = ()=>{
+    if($("li[data-product-type]:not(.enabled)").length == 1 && $("li[data-product-type='kids-clothes']").hasClass("enabled") == false){
+        $("#adults_only").prop('checked', true);
+    }else $("#adults_only").removeAttr('checked');
 }
