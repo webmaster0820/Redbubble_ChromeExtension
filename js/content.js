@@ -42,13 +42,23 @@ $(document).ready(function () {
         Toggle_enable($(this).is(":checked"), true);
     });
 
-    $(document).on("click", "#media_black_background", function () {
-        Change_Product_color();
+    $(document).on("click", "#media_black_background", function (e) {
+        Change_Product_color(e);
     });
+
     $(document).on("click", ".sp-color", function (e) {
-        console.log(e);
+        let lx = e.pageX - $(this).offset().left, ly = e.pageY - $(this).offset().top;
+        //alert("click" + lx + ":" + ly);
     });
-    
+    $(document).on("mousedown", ".sp-color", function (e) {
+        let lx = e.pageX - $(this).offset().left, ly = e.pageY - $(this).offset().top;
+        //alert("mousedown"+ lx + ":" + ly);
+    });
+    $(document).on("mouseup", ".sp-color", function (e) {
+
+        let lx = e.pageX - $(this).offset().left, ly = e.pageY - $(this).offset().top;
+        //alert("mouseup"+ lx + ":" + ly);
+    });
     App_logic();
 });
 
@@ -89,7 +99,7 @@ const Update_adults_only = () => {
     } else $("#adults_only").removeAttr('checked');
 }
 
-const Change_Product_color = () => {
+const Change_Product_color = (ent) => {
     new Promise(function (resolve, reject) {
         let cnt = 0;
         $(".sp-replacer.sp-light").each(function () {
@@ -99,18 +109,41 @@ const Change_Product_color = () => {
         resolve(cnt);
 
     }).then(function (result) { // (**)
+        // 134.390625 136.125
+        // alert(result); // 1    top: 4888.88px;  left: 1092.61px;
+        $(".sp-color").each(function () {
+            console.log({"top":ent.pageX - 133,"left":ent.pageY-135});
+            $(this).parents(".sp-container").eq(0).css({"left":ent.pageX - 133,"top":ent.pageY-135});
+            var e = new jQuery.Event("mouseup");
+            e.pageX = $(this).offset().left + 133;
+            e.pageY = $(this).offset().top + 135;
+            $(this).trigger(e);
+            var e = new jQuery.Event("mousedown");
+            e.pageX = $(this).offset().left + 133;
+            e.pageY = $(this).offset().top + 135;
+            $(this).trigger(e);
 
-        alert(result); // 1
+            var e = new jQuery.Event("click");
+            e.pageX = $(this).offset().left + 133;
+            e.pageY = $(this).offset().top + 135;
+            $(this).trigger(e);
+
+            var e = new jQuery.Event("touchstart");
+            e.pageX = $(this).offset().left + 133;
+            e.pageY = $(this).offset().top + 135;
+            $(this).trigger(e);            
+        });
         return result * 2;
+
 
     }).then(function (result) { // (***)
 
-        alert(result); // 2
+        // alert(result); // 2
         return result * 2;
 
     }).then(function (result) {
 
-        alert(result); // 4
+        // alert(result); // 4
         return result * 2;
 
     });
