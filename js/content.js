@@ -261,14 +261,8 @@ const Change_Product_color_black = () => {
         .eq(0)
         .css({ left: -1000, top: -1000 })
         .removeClass("sp-hidden");
-      simulate(this, "mousedown", {
-        pointerX: $(this).offset().left + 0,
-        pointerY: $(this).offset().top + 0
-      });
-      simulate(this, "mouseup", {
-        pointerX: $(this).offset().left + 0,
-        pointerY: $(this).offset().top + 0
-      });
+      simulate(this, "mousedown", { pointerX: 1000000, pointerY: 1000000 });
+      simulate(this, "mouseup", { pointerX: 1000000, pointerY: 1000000 });
     });
     return result * 2;
   });
